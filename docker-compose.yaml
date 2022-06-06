@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  postgres-db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+    - ./postgres-data:/var/lib/postgresql/data
+    - ./scripts/create_tables.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    - ./data_csv:/var/lib/postgresql/data_csv
+    ports:
+     - 5432:5432
+
+  metabase:
+    image: metabase/metabase
+    restart: always
+    volumes:
+      # declare your mount volume /host/dir:/container/dir
+      - ./metabase-data:/metabase-data
+    environment:
+      MB_DB_FILE: /metabase-data/metabase.db
+      MB_DB_TYPE: h2
+    ports:
+     - 3000:3000
+    depends_on:
+      - postgres-db
+    links:
+      - postgres-db
+
+
+
+
+
+
+

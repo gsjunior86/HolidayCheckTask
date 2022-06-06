@@ -1,0 +1,7 @@
+.idea
+.bsp
+target/
+logs/
+project/target
+project/project
+postgres-data
