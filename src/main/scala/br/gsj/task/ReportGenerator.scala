@@ -10,18 +10,18 @@ object ReportGenerator extends App with ReportsDef{
 
   val bookingsDF = spark.read
     .format("jdbc")
-    .option("url", "jdbc:postgresql://localhost:5432/hcdb")
-    .option("dbtable", "taskdb.bookings")
-    .option("user", "postgres")
-    .option("password", "postgres")
+    .option("url", s"jdbc:postgresql://${postgresHost}/${sourceDB}")
+    .option("dbtable", s"${dataSchema}.bookings")
+    .option("user", dbUSER)
+    .option("password", dbPASSWD)
     .load()
 
   val cancellationsDF = spark.read
     .format("jdbc")
-    .option("url", "jdbc:postgresql://localhost:5432/hcdb")
-    .option("dbtable", "taskdb.cancellations")
-    .option("user", "postgres")
-    .option("password", "postgres")
+    .option("url", s"jdbc:postgresql://${postgresHost}/${sourceDB}")
+    .option("dbtable", s"${dataSchema}.cancellations")
+    .option("user", dbUSER)
+    .option("password", dbPASSWD)
     .load()
 
   val year_report: Int = 2021
@@ -30,6 +30,7 @@ object ReportGenerator extends App with ReportsDef{
   generateBookingsPerDayReport(bookingsDF)
   generateMostPopularDestinationsReports(bookingsDF)
   generatePeakSeasonReport(bookingsDF)
+  generateUntilReport(cancellationsDF)
 
 
 
