@@ -1,3 +1,12 @@
+# HolidayCheck Challenge
+
+## Run Instructions
+Before running, please make sure that you have **Docker** and **docker-compose** installed.
+Then, start with *docker-compose up*
+
+
+
+
 # Programming Assignment
 
 We want to get a better understanding of the bookings that happen on our website. Specifically, how many bookings are cancellable, number of bookings per day, what are the popular destinations and what is the peak travel season.
