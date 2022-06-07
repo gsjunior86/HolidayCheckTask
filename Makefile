@@ -1,7 +1,8 @@
-default: dockerize-hadoop
+default: build
 
 
+build:
+	sbt reload clean compile package
 
-dockerize-hadoop:
-	docker build -f hadoop-conf/Dockerfile.hadoop -t gsjunior/hadoop .
-
+dockerize:
+	docker build -f Dockerfile.base -t gsjunior/holidaycheck_challenge .

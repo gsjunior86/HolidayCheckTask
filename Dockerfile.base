@@ -1,0 +1,29 @@
+FROM ubuntu:20.04
+
+ENV SPARK_VERSION=3.2.1
+ENV HADOOP_VERSION=3.2
+
+RUN apt-get update && \
+    apt-get install -y openjdk-11-jdk && \
+    apt-get install -y wget && \
+    apt-get clean;
+
+
+
+RUN wget http://apache.mirror.iphh.net/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz && tar -xvzf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz \
+      && mv spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} spark \
+      && rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz
+
+
+RUN export PATH="/spark/bin:$PATH"
+RUN export SPARK_HOME="/spark/"
+
+
+COPY ./target/scala-2.12/holidaycheck_2.12-1.0-RELEASE.jar /data/holidaycheck/hc.jar
+WORKDIR /data/holidaycheck
+
+RUN mkdir lib
+RUN wget https://jdbc.postgresql.org/download/postgresql-42.3.6.jar
+RUN mv postgresql-42.3.6.jar lib/postgresql.jar
+
+CMD /spark/bin/./spark-submit --class br.gsj.challenge.ReportGenerator --jars $(echo lib/*.jar | tr ' ' ',') --master local[*] hc.jar

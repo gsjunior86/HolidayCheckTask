@@ -1,4 +1,5 @@
-package br.gsj.task
+package br.gsj.challenge
+
 
 import org.apache.spark.sql.{DataFrame, SaveMode}
 import org.apache.spark.sql.functions._
@@ -12,6 +13,8 @@ trait ReportsDef {
   val dbPASSWD = sys.env.getOrElse("DB_PASSWD", throw new NoSuchElementException ("DB_PASSWD must be set"))
   val postgresHost = sys.env.getOrElse("POSTGRES_HOST", throw new NoSuchElementException ("POSTGRES_HOST must be set"))
 
+  val driver = "org.postgresql.Driver"
+
 
   /**
    *  How many bookings are cancellable
@@ -23,7 +26,8 @@ trait ReportsDef {
   def generateCancellableBookingsReport(bookingsDF : DataFrame,cancellationsDF: DataFrame)= {
     bookingsDF.join(cancellationsDF, bookingsDF("booking_id") === cancellationsDF("booking_id"))
       .where(col("cancellation_type") === 52)
-      .groupBy(col("cancellation_type"))
+      .withColumn("year", year(col("booking_date")))
+      .groupBy(col("cancellation_type"),col("year"))
       .agg(count("cancellation_type").as("cancellation_count"))
       .write
       .format("jdbc")
@@ -32,6 +36,7 @@ trait ReportsDef {
       .option("dbtable", s"${reportsSchema}.cancellable_bookings")
       .option("user", dbUSER)
       .option("password", dbPASSWD)
+      .option("driver", driver)
       .save
 
 
@@ -48,8 +53,11 @@ trait ReportsDef {
     cancellationsDF.where(
       col("cancellation_type") === 52
       || col("cancellation_type") === 53)
-      .withColumn("until", to_date(date_trunc("day",col("enddate"))))
-      .orderBy("until")
+      .where(col("enddate").isNotNull)
+      .withColumn("enddate", to_date(date_trunc("day",col("enddate"))))
+      .withColumn("cancellation_type", when(col("cancellation_type") === 52,"free")
+        .when(col("cancellation_type") === 53,"cheap fee"))
+      .orderBy("enddate")
       .write
       .format("jdbc")
       .mode(SaveMode.Overwrite)
@@ -57,6 +65,7 @@ trait ReportsDef {
       .option("dbtable", s"${reportsSchema}.free_and_fee_cancellable")
       .option("user", dbUSER)
       .option("password", dbPASSWD)
+      .option("driver", driver)
       .save
 
 
@@ -82,6 +91,7 @@ trait ReportsDef {
       .option("dbtable", s"${reportsSchema}.bookings_per_day")
       .option("user", dbUSER)
       .option("password", dbPASSWD)
+      .option("driver", driver)
       .save
 
   }
@@ -93,7 +103,8 @@ trait ReportsDef {
 
   def generateMostPopularDestinationsReports(bookingsDF : DataFrame) ={
     bookingsDF
-      .groupBy(col("destination"))
+      .withColumn("year_travel",year(col("departure_date")))
+      .groupBy(col("destination"),col("year_travel"))
       .agg(count("destination").as("count_destination"))
       .orderBy(col("count_destination").desc)
       .write
@@ -103,6 +114,7 @@ trait ReportsDef {
       .option("dbtable", s"${reportsSchema}.popular_destinations")
       .option("user", dbUSER)
       .option("password", dbPASSWD)
+      .option("driver", driver)
       .save
   }
 
@@ -125,6 +137,7 @@ trait ReportsDef {
       .option("dbtable", s"${reportsSchema}.peak_travel_season")
       .option("user", dbUSER)
       .option("password", dbPASSWD)
+      .option("driver", driver)
       .save
 
 
