@@ -14,6 +14,11 @@ and run with:
 docker-compose up
 ```
 
+Wait for the **report-generator** container to finish and access the reports through the dashboard available at:
+```
+http://localhost:3000/public/dashboard/bb1f855c-2c0c-451d-91c6-d2efc3b2f24f
+```
+
 ## Build Instructions
 In case you want to build locally make sure that you have installed:
 
@@ -22,7 +27,7 @@ In case you want to build locally make sure that you have installed:
 - **make**
 
 
-
+## Pipeline Description
 <img src="https://github.com/gsjunior86/HolidayCheckTask/blob/main/img/holidaycheck.png" align="center" height="550" width="894" >
 
 
