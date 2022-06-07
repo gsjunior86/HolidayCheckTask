@@ -1,8 +1,9 @@
 package br.gsj.challenge
 
+import br.gsj.challenge.ReportGenerator.{bookingsDF, cancellationsDF, generateBookingsPerDayReport, generateCancellableBookingsReport, generateMostPopularDestinationsReports, generatePeakSeasonReport, generateUntilReport}
 import org.apache.spark.sql.SparkSession
 
-object ReportGenerator extends App with ReportsDef{
+object ReportGenerator extends App with ReportGenerator {
 
   val spark = SparkSession.builder()
     //.master("local[*]")
@@ -27,14 +28,18 @@ object ReportGenerator extends App with ReportsDef{
     .option("driver", driver)
     .load()
 
-  val year_report: Int = 2021
+  generateReports()
 
-  generateCancellableBookingsReport(bookingsDF, cancellationsDF)
-  generateBookingsPerDayReport(bookingsDF)
-  generateMostPopularDestinationsReports(bookingsDF)
-  generatePeakSeasonReport(bookingsDF)
-  generateUntilReport(cancellationsDF)
+}
 
+trait ReportGenerator extends ReportsDef{
 
+  def generateReports() = {
+    generateCancellableBookingsReport(bookingsDF, cancellationsDF)
+    generateBookingsPerDayReport(bookingsDF)
+    generateMostPopularDestinationsReports(bookingsDF)
+    generatePeakSeasonReport(bookingsDF)
+    generateUntilReport(cancellationsDF)
+  }
 
 }

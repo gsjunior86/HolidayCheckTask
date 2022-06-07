@@ -6,12 +6,18 @@ import org.apache.spark.sql.functions._
 
 trait ReportsDef {
 
+  val allowedSaveModes = Map("1"-> "Overwrite", "2" -> "Append")
+
   val reportsSchema = sys.env.getOrElse("REPORT_SCHEMA", throw new NoSuchElementException ("REPORT_SCHEMA must be set"))
   val dataSchema = sys.env.getOrElse("DATA_SCHEMA", throw new NoSuchElementException ("DATA_SCHEMA must be set"))
   val sourceDB = sys.env.getOrElse("DB_SOURCE", throw new NoSuchElementException ("DATA_SOURCE must be set"))
   val dbUSER = sys.env.getOrElse("DB_USER", throw new NoSuchElementException ("DB_USER must be set"))
   val dbPASSWD = sys.env.getOrElse("DB_PASSWD", throw new NoSuchElementException ("DB_PASSWD must be set"))
   val postgresHost = sys.env.getOrElse("POSTGRES_HOST", throw new NoSuchElementException ("POSTGRES_HOST must be set"))
+  var saveMode = sys.env.getOrElse("SAVE_MODE", throw new NoSuchElementException ("SAVE_MODE must be set"))
+
+
+  saveMode =  allowedSaveModes.getOrElse(saveMode, throw new NoSuchElementException ("Save mode should be 1=Overwrite or 2=Append"))
 
   val driver = "org.postgresql.Driver"
 
@@ -31,7 +37,7 @@ trait ReportsDef {
       .agg(count("cancellation_type").as("cancellation_count"))
       .write
       .format("jdbc")
-      .mode(SaveMode.Overwrite)
+      .mode(saveMode)
       .option("url", s"jdbc:postgresql://${postgresHost}/${sourceDB}")
       .option("dbtable", s"${reportsSchema}.cancellable_bookings")
       .option("user", dbUSER)
@@ -60,7 +66,7 @@ trait ReportsDef {
       .orderBy("enddate")
       .write
       .format("jdbc")
-      .mode(SaveMode.Overwrite)
+      .mode(saveMode)
       .option("url", s"jdbc:postgresql://${postgresHost}/${sourceDB}")
       .option("dbtable", s"${reportsSchema}.free_and_fee_cancellable")
       .option("user", dbUSER)
@@ -86,7 +92,7 @@ trait ReportsDef {
       .orderBy("date")
       .write
       .format("jdbc")
-      .mode(SaveMode.Overwrite)
+      .mode(saveMode)
       .option("url", s"jdbc:postgresql://${postgresHost}/${sourceDB}")
       .option("dbtable", s"${reportsSchema}.bookings_per_day")
       .option("user", dbUSER)
@@ -109,7 +115,7 @@ trait ReportsDef {
       .orderBy(col("count_destination").desc)
       .write
       .format("jdbc")
-      .mode(SaveMode.Overwrite)
+      .mode(saveMode)
       .option("url", s"jdbc:postgresql://${postgresHost}/${sourceDB}")
       .option("dbtable", s"${reportsSchema}.popular_destinations")
       .option("user", dbUSER)
@@ -132,7 +138,7 @@ trait ReportsDef {
       .agg(count("month_departure").as("count_departures"))
       .write
       .format("jdbc")
-      .mode(SaveMode.Overwrite)
+      .mode(saveMode)
       .option("url", s"jdbc:postgresql://${postgresHost}/${sourceDB}")
       .option("dbtable", s"${reportsSchema}.peak_travel_season")
       .option("user", dbUSER)
