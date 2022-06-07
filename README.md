@@ -1,8 +1,29 @@
 # HolidayCheck Challenge
 
 ## Run Instructions
-Before running, please make sure that you have **Docker** and **docker-compose** installed.
-Then, start with *docker-compose up*
+Before running, please make sure that you have **git**, **Docker** and **docker-compose** installed.
+
+Then, clone and access the project folder with with:
+```
+git clone https://github.com/gsjunior86/HolidayCheckTask
+cd HolidayCheckTask/
+```
+
+and run with:
+```
+docker-compose up
+```
+
+## Build Instructions
+In case you want to build locally make sure that you have installed:
+
+- **scala build tool (sbt)** (https://www.scala-sbt.org/)
+- **JDK 11 or 8**
+- **make**
+
+
+
+<img src="https://hobbitdata.informatik.uni-leipzig.de/squirrel/squirrel-logo.png" align="center" height="894" width="550" >
 
 
 
