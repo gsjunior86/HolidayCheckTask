@@ -23,7 +23,7 @@ In case you want to build locally make sure that you have installed:
 
 
 
-<img src="https://github.com/gsjunior86/HolidayCheckTask/blob/main/img/holidaycheck.png" align="center" height="894" width="550" >
+<img src="https://github.com/gsjunior86/HolidayCheckTask/blob/main/img/holidaycheck.png" align="center" height="550" width="894" >
 
 
 
