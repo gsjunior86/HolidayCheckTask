@@ -30,6 +30,19 @@ In case you want to build locally make sure that you have installed:
 ## Pipeline Description
 <img src="https://github.com/gsjunior86/HolidayCheckTask/blob/main/img/holidaycheck.png" align="center" height="550" width="894" >
 
+The entry point to the pipeline is the creation of table and load of the CSV files into a postgresql database instance.
+When the database is ready, the spark local container will be executed, with the following parameters:
+- DB_HOST: <data_base_address>:<data_base_port>
+- DB_USER: database user
+- DB_PASSWD: database password
+- DATA_SCHEMA: the schema where the data is located
+- DB_SOURCE: the data base where the data is located
+- REPORT_SCHEMA: the schema where the reports will be saved
+- DRIVER_CLASS: the JDBC Driver class
+
+After all the tables were created and data loaded, the spark Job will read the tables from the database and schema that were informed, storing the processed data as tables inside the **REPORT_SCHEMA**.
+When the processing is done, the Metabase instance will read the processed tables and generate the dashboards.
+Metabase data is stored by it's internal H2 database, stored at /metabase-data and unfortunately, the configuration is not parametrized
 
 
 
