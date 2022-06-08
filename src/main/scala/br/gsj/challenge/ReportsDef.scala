@@ -6,7 +6,7 @@ import org.apache.spark.sql.functions._
 
 trait ReportsDef {
 
-  val allowedSaveModes = Map("1"-> "Overwrite", "2" -> "Append")
+
 
   val reportsSchema = sys.env.getOrElse("REPORT_SCHEMA", throw new NoSuchElementException ("REPORT_SCHEMA must be set"))
   val dataSchema = sys.env.getOrElse("DATA_SCHEMA", throw new NoSuchElementException ("DATA_SCHEMA must be set"))
@@ -14,12 +14,9 @@ trait ReportsDef {
   val dbUSER = sys.env.getOrElse("DB_USER", throw new NoSuchElementException ("DB_USER must be set"))
   val dbPASSWD = sys.env.getOrElse("DB_PASSWD", throw new NoSuchElementException ("DB_PASSWD must be set"))
   val postgresHost = sys.env.getOrElse("POSTGRES_HOST", throw new NoSuchElementException ("POSTGRES_HOST must be set"))
-  var saveMode = sys.env.getOrElse("SAVE_MODE", throw new NoSuchElementException ("SAVE_MODE must be set"))
+  val driver = sys.env.getOrElse("DRIVER_CLASS", throw new NoSuchElementException ("DRIVER_CLASS must be set"))
 
-
-  saveMode =  allowedSaveModes.getOrElse(saveMode, throw new NoSuchElementException ("Save mode should be 1=Overwrite or 2=Append"))
-
-  val driver = "org.postgresql.Driver"
+  val saveMode = SaveMode.Overwrite
 
 
   /**

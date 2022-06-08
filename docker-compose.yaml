@@ -23,9 +23,7 @@ services:
       - POSTGRES_HOST=postgres-db:5432
       - REPORT_SCHEMA=reports
       - DB_SOURCE=hcdb
-      - SAVE_MODE=2
-    #volumes:
-    #  - ./logs:/var/riskident/logs
+      - DRIVER_CLASS=org.postgresql.Driver
     depends_on:
       - postgres-db
 
