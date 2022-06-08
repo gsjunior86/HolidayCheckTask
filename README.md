@@ -42,7 +42,9 @@ When the database is ready, the spark local container will be executed, with the
 
 After all the tables were created and data loaded, the spark Job will read the tables from the database and schema that were informed, storing the processed data as tables inside the **REPORT_SCHEMA**.
 When the processing is done, the Metabase instance will read the processed tables and generate the dashboards.
-Metabase data is stored by it's internal H2 database, stored at /metabase-data and unfortunately, the configuration is not parametrized
+Metabase data is stored by it's internal H2 database, stored at /metabase-data and unfortunately, the configuration is not parametrized.
+
+<img src="https://github.com/gsjunior86/HolidayCheckTask/blob/main/img/dashboard.png" align="center" height="432" width="768" >
 
 
 
