@@ -12,7 +12,7 @@ object ReportGenerator extends App with ReportGenerator {
 
   val bookingsDF = spark.read
     .format("jdbc")
-    .option("url", s"jdbc:postgresql://${postgresHost}/${sourceDB}")
+    .option("url", s"jdbc:postgresql://${dbHost}/${sourceDB}")
     .option("dbtable", s"${dataSchema}.bookings")
     .option("user", dbUSER)
     .option("password", dbPASSWD)
@@ -21,7 +21,7 @@ object ReportGenerator extends App with ReportGenerator {
 
   val cancellationsDF = spark.read
     .format("jdbc")
-    .option("url", s"jdbc:postgresql://${postgresHost}/${sourceDB}")
+    .option("url", s"jdbc:postgresql://${dbHost}/${sourceDB}")
     .option("dbtable", s"${dataSchema}.cancellations")
     .option("user", dbUSER)
     .option("password", dbPASSWD)

@@ -13,7 +13,7 @@ trait ReportsDef {
   val sourceDB = sys.env.getOrElse("DB_SOURCE", throw new NoSuchElementException ("DATA_SOURCE must be set"))
   val dbUSER = sys.env.getOrElse("DB_USER", throw new NoSuchElementException ("DB_USER must be set"))
   val dbPASSWD = sys.env.getOrElse("DB_PASSWD", throw new NoSuchElementException ("DB_PASSWD must be set"))
-  val postgresHost = sys.env.getOrElse("POSTGRES_HOST", throw new NoSuchElementException ("POSTGRES_HOST must be set"))
+  val dbHost = sys.env.getOrElse("DB_HOST", throw new NoSuchElementException ("DB_HOST must be set"))
   val driver = sys.env.getOrElse("DRIVER_CLASS", throw new NoSuchElementException ("DRIVER_CLASS must be set"))
 
   val saveMode = SaveMode.Overwrite
@@ -35,7 +35,7 @@ trait ReportsDef {
       .write
       .format("jdbc")
       .mode(saveMode)
-      .option("url", s"jdbc:postgresql://${postgresHost}/${sourceDB}")
+      .option("url", s"jdbc:postgresql://${dbHost}/${sourceDB}")
       .option("dbtable", s"${reportsSchema}.cancellable_bookings")
       .option("user", dbUSER)
       .option("password", dbPASSWD)
@@ -64,7 +64,7 @@ trait ReportsDef {
       .write
       .format("jdbc")
       .mode(saveMode)
-      .option("url", s"jdbc:postgresql://${postgresHost}/${sourceDB}")
+      .option("url", s"jdbc:postgresql://${dbHost}/${sourceDB}")
       .option("dbtable", s"${reportsSchema}.free_and_fee_cancellable")
       .option("user", dbUSER)
       .option("password", dbPASSWD)
@@ -90,7 +90,7 @@ trait ReportsDef {
       .write
       .format("jdbc")
       .mode(saveMode)
-      .option("url", s"jdbc:postgresql://${postgresHost}/${sourceDB}")
+      .option("url", s"jdbc:postgresql://${dbHost}/${sourceDB}")
       .option("dbtable", s"${reportsSchema}.bookings_per_day")
       .option("user", dbUSER)
       .option("password", dbPASSWD)
@@ -113,7 +113,7 @@ trait ReportsDef {
       .write
       .format("jdbc")
       .mode(saveMode)
-      .option("url", s"jdbc:postgresql://${postgresHost}/${sourceDB}")
+      .option("url", s"jdbc:postgresql://${dbHost}/${sourceDB}")
       .option("dbtable", s"${reportsSchema}.popular_destinations")
       .option("user", dbUSER)
       .option("password", dbPASSWD)
@@ -136,7 +136,7 @@ trait ReportsDef {
       .write
       .format("jdbc")
       .mode(saveMode)
-      .option("url", s"jdbc:postgresql://${postgresHost}/${sourceDB}")
+      .option("url", s"jdbc:postgresql://${dbHost}/${sourceDB}")
       .option("dbtable", s"${reportsSchema}.peak_travel_season")
       .option("user", dbUSER)
       .option("password", dbPASSWD)

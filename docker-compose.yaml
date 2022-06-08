@@ -20,7 +20,7 @@ services:
       - DATA_SCHEMA=data
       - DB_PASSWD=postgres
       - DB_USER=postgres
-      - POSTGRES_HOST=postgres-db:5432
+      - DB_HOST=postgres-db:5432
       - REPORT_SCHEMA=reports
       - DB_SOURCE=hcdb
       - DRIVER_CLASS=org.postgresql.Driver
